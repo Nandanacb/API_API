@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:product_api/datamodel.dart';
 import 'package:product_api/details.dart';
+import 'package:product_api/whishlist.dart';
 
 class Api extends StatefulWidget {
   const Api({super.key});
@@ -49,45 +50,59 @@ class _ApiState extends State<Api> {
               ? const Center(
                   child: Text('Failed to load data'),
                 )
-              : GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10),
-                  itemCount: dataFromAPI!.products.length,
-                  itemBuilder: (context, index) {
-                    final product = dataFromAPI!.products[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ApiDemo(
-                                      product: product,
-                                    )));
-                      },
-                      child: Container(
-                        height: 400,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 70, 8, 3))),
-                        child: Column(
-                          children: [
-                            Image.network(product.thumbnail,
-                                width: 100, height: 100),
-                            SizedBox(
-                              height: 10,
+              : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5),
+                    itemCount: dataFromAPI!.products.length,
+                    itemBuilder: (context, index) {
+                      final product = dataFromAPI!.products[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ApiDemo(
+                                        product: product,
+                                      )));
+                        },
+                        child: Container(
+                          height: 600,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color.fromARGB(255, 70, 8, 3))),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Image.network(product.thumbnail,
+                                    width: double.infinity, height: 82),
+                                
+                                Text(product.title),
+                                
+                                Text("\$${product.price.toString()}"),
+                                                                  
+                                Row(
+                                  children: [
+                                    SizedBox(width: 120,),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>WhishlistDemo(product: product,)));
+                                      },
+                                      child: Icon(Icons.favorite_border_outlined))
+                                   
+                                  ],
+                                ),
+                              ],
                             ),
-                            Text(product.title),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text("\$${product.price.toString()}"),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+              ),
     );
   }
 }
